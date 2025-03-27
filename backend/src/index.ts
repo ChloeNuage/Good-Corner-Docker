@@ -20,7 +20,8 @@ app.post("/ads", async (req, res) => {
   ad.picture = req.body.picture;
   ad.location = req.body.location;
   ad.category = req.body.category;
-  ad.tags = req.body.tags;
+  // ['1','2'] => [{id:1}, {id:2}]
+  ad.tags = req.body.tags.map((el: string) => ({ id: Number.parseInt(el) }));
   try {
     await ad.save();
     res.status(201).send("ad has been created");
@@ -91,6 +92,11 @@ app.post("/tags", async (req, res) => {
   newTag.title = req.body.title;
   await newTag.save();
   res.status(201).send("Tag has been created");
+});
+
+app.get("/tags", async (_req, res) => {
+  const tags = await Tag.find();
+  res.send(tags);
 });
 
 app.listen(port, async () => {

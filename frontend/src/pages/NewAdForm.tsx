@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Category } from "../types";
+import { Category, Tag } from "../types";
 
 type Inputs = {
   title: string;
@@ -11,17 +11,20 @@ type Inputs = {
   picture: string;
   location: string;
   category: number;
+  tags: string[];
 };
 
 const NewAdForm = () => {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   useEffect(() => {
-    const fetchCategories = async () => {
-      const result = await axios.get("http://localhost:3000/categories");
-      console.log(result);
-      setCategories(result.data);
+    const fetchCategoriesAndTags = async () => {
+      const categories = await axios.get("http://localhost:3000/categories");
+      setCategories(categories.data);
+      const tags = await axios.get("http://localhost:3000/tags");
+      setTags(tags.data);
     };
-    fetchCategories();
+    fetchCategoriesAndTags();
   }, []);
 
   const { register, handleSubmit } = useForm<Inputs>();
@@ -107,6 +110,14 @@ const NewAdForm = () => {
       </label>
 
       <br />
+      {tags.map((el) => (
+        <div key={el.id}>
+          <label>
+            {el.title}
+            <input value={el.id} type="checkbox" {...register("tags")} />
+          </label>
+        </div>
+      ))}
 
       <input type="submit" />
     </form>
