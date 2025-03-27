@@ -1,4 +1,4 @@
-GET http://localhost:3000/ads
+GET http://localhost:3000/ads?search=car
 
 ###
 

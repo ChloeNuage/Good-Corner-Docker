@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { AdDetails } from "../types";
+import { toast } from "react-toastify";
 
 const AdDetailsPage = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [ad, setAd] = useState<AdDetails>();
   useEffect(() => {
@@ -52,6 +54,20 @@ const AdDetailsPage = () => {
               </svg>
               Envoyer un email
             </a>
+            <button
+              onClick={async () => {
+                try {
+                  await axios.delete(`http://localhost:3000/ads/${id}`);
+                  navigate("/");
+                  toast.success("Ad has been deleted");
+                } catch (err) {
+                  console.log(err);
+                  toast.error("An error occurred");
+                }
+              }}
+            >
+              Delete
+            </button>
           </div>
         </section>
       </div>
