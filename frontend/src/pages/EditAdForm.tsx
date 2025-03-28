@@ -35,7 +35,7 @@ const EditAdForm = () => {
   const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await axios.post("http://localhost:3000/ads", data);
+    await axios.put(`http://localhost:3000/ads/${id}`, data);
   };
 
   if (ad === undefined) {
@@ -125,9 +125,7 @@ const EditAdForm = () => {
           <label>
             {el.title}
             <input
-              defaultChecked={
-                ad.tags.find((tag) => tag.id === el.id) !== undefined
-              }
+              defaultChecked={ad.tags.some((tag) => tag.id === el.id)}
               value={el.id}
               type="checkbox"
               {...register("tags")}

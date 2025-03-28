@@ -73,8 +73,35 @@ app.delete("/ads/:id", async (req, res) => {
 });
 
 app.put("/ads/:id", async (req, res) => {
-  await Ad.update({ id: Number.parseInt(req.params.id) }, req.body);
-  res.send("Ad has been updated");
+  try {
+    const adIdToUpdate = Number.parseInt(req.params.id);
+    console.log(adIdToUpdate);
+    const adToUpdate = await Ad.findOneByOrFail({ id: adIdToUpdate });
+    console.log("ad to update", adToUpdate);
+    adToUpdate.title = req.body.title ? req.body.title : adToUpdate.title;
+    adToUpdate.description = req.body.description
+      ? req.body.description
+      : adToUpdate.description;
+    adToUpdate.location = req.body.location
+      ? req.body.location
+      : adToUpdate.location;
+    adToUpdate.owner = req.body.owner ? req.body.owner : adToUpdate.owner;
+    adToUpdate.picture = req.body.picture
+      ? req.body.picture
+      : adToUpdate.picture;
+    adToUpdate.price = req.body.price ? req.body.price : adToUpdate.price;
+    adToUpdate.category = req.body.category
+      ? req.body.category
+      : adToUpdate.category;
+    adToUpdate.tags = req.body.tags
+      ? req.body.tags.map((el: string) => ({ id: Number.parseInt(el) }))
+      : adToUpdate.tags;
+    await adToUpdate.save();
+    res.send("Ad has been updated");
+  } catch (err) {
+    console.log("err", err);
+    res.status(500).send(err);
+  }
 });
 
 app.post("/categories", async (req, res) => {
