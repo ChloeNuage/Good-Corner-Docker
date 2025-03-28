@@ -124,7 +124,14 @@ const EditAdForm = () => {
         <div key={el.id}>
           <label>
             {el.title}
-            <input value={el.id} type="checkbox" {...register("tags")} />
+            <input
+              defaultChecked={
+                ad.tags.find((tag) => tag.id === el.id) !== undefined
+              }
+              value={el.id}
+              type="checkbox"
+              {...register("tags")}
+            />
           </label>
         </div>
       ))}
