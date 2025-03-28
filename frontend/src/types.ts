@@ -16,6 +16,6 @@ export type AdDetails = {
   picture: string;
   location: string;
   createdAt: string;
-  category: number;
+  category: Category;
   tags: Tag[];
 };

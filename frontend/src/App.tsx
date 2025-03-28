@@ -8,6 +8,7 @@ import AdDetailsPage from "./pages/AdDetails";
 import NewAdForm from "./pages/NewAdForm";
 import NewCategoryForm from "./pages/NewCategoryForm";
 import SearchPage from "./pages/SearchPage";
+import EditAdForm from "./pages/EditAdForm";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route index element={<RecentAds />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="ads/:id" element={<AdDetailsPage />} />
+        <Route path="ads/:id/edit" element={<EditAdForm />} />
         <Route path="ads/new" element={<NewAdForm />} />
         <Route path="category/new" element={<NewCategoryForm />} />
         <Route path="search/:keyword" element={<SearchPage />} />
