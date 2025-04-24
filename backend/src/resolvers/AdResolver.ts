@@ -94,20 +94,15 @@ export default class AdResolver {
   //   return await Ad.findOneBy({ id: ad.id });
   // }
 
-  //TODO Finish this
-  // @Mutation(() => ID)
-  // async updateAd(@Arg("id") id: number, @Arg("data") data: AdInput) {
-  //   //const adToUpdate = await Ad.findOneByOrFail({ id });
-  //   Ad.update(
-  //     { id },
-  //     {
-  //       ...data,
-  //       tags: data.tags && data.tags.map((tag) => ({ id: tag.id })),
-  //     }
-  //   );
-
-  //   return id;
-  // }
+  @Mutation(() => ID)
+  async updateAd(@Arg("id") id: number, @Arg("data") data: AdInput) {
+    let ad = await Ad.findOneByOrFail({ id });
+    ad = Object.assign(ad, data, {
+      tags: data.tags.map((tag) => ({ id: Number(tag) })),
+    });
+    await ad.save();
+    return ad.id;
+  }
 
   @Mutation(() => ID)
   async deleteAd(@Arg("id") id: number) {
