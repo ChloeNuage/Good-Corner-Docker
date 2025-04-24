@@ -48,10 +48,12 @@ class Ad extends BaseEntity {
   location: string;
 
   @ManyToOne(() => Category, (category) => category.ads, { eager: true })
+  @Field(() => Category)
   category: Category;
 
   @ManyToMany(() => Tag, { eager: true })
   @JoinTable()
+  @Field(() => [Tag])
   tags: Tag[];
 }
 
