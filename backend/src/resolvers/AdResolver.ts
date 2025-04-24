@@ -8,7 +8,7 @@ import {
   Resolver,
 } from "type-graphql";
 import Ad from "../entities/Ad";
-import { FindManyOptions } from "typeorm";
+import { FindManyOptions, In } from "typeorm";
 import Category from "../entities/Category";
 import Tag from "../entities/Tag";
 
@@ -67,24 +67,13 @@ export default class AdResolver {
     return allAds;
   }
 
-  @Mutation(() => Ad)
+  @Mutation(() => ID)
   async createAd(@Arg("data") data: AdInput) {
-    const ad = new Ad();
-    ad.title = data.title;
-    ad.description = data.description;
-    ad.owner = data.owner;
-    ad.price = data.price;
-    ad.picture = data.picture;
-    ad.location = data.location;
-    ad.category = data.category;
-    // ['1','2'] => [{id:1}, {id:2}]
-    //ad.tags = data.tags.map((tag) => ({ id: tag.id }));
-    try {
-      await ad.save();
-      return ad;
-    } catch (err) {
-      console.warn(err);
-      return ad; //TODO Make something more sensible
-    }
+    const ad = Ad.create({
+      ...data,
+      tags: data.tags.map((tag) => ({ id: Number(tag) })),
+    });
+    await ad.save();
+    return ad.id;
   }
 }

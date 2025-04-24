@@ -4,11 +4,15 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { buildSchema } from "type-graphql";
 import AdResolver from "./resolvers/AdResolver";
+import CategoryResolver from "./resolvers/CategoryResolver";
+import TagResolver from "./resolvers/TagResolver";
 const port = 3000;
 
 async function startServer() {
   await dataSource.initialize();
-  const schema = await buildSchema({ resolvers: [AdResolver] });
+  const schema = await buildSchema({
+    resolvers: [AdResolver, CategoryResolver, TagResolver],
+  });
   const apolloServer = new ApolloServer({ schema: schema });
   const { url } = await startStandaloneServer(apolloServer, {
     listen: { port },

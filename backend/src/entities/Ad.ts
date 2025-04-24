@@ -51,7 +51,7 @@ class Ad extends BaseEntity {
   @Field(() => Category)
   category: Category;
 
-  @ManyToMany(() => Tag, { eager: true })
+  @ManyToMany(() => Tag, (tag) => tag.ads, { eager: true })
   @JoinTable()
   @Field(() => [Tag])
   tags: Tag[];
