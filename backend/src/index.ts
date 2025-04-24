@@ -21,47 +21,6 @@ async function startServer() {
 }
 startServer();
 
-// app.get("/ads", async (req, res) => {
-//   // /ads?category=1 => req.query.category = 1
-//   let findOptions: FindManyOptions<Ad> = {
-//     relations: { category: true, tags: true },
-//   };
-//   if (req.query.category !== undefined) {
-//     findOptions = {
-//       ...findOptions,
-//       where: {
-//         category: { id: Number.parseInt(req.query.category as string) },
-//       },
-//     };
-//   }
-//   if (req.query.search !== undefined) {
-//     console.log("search query", req.query.search);
-//     findOptions = {
-//       ...findOptions,
-//       where: { title: ILike(`%${req.query.search}%`) },
-//     };
-//   }
-//   const allAds = await Ad.find(findOptions);
-//   res.send(allAds);
-// });
-
-// app.get("/ads/:id", async (req, res) => {
-//   const result = await Ad.findOneByOrFail({
-//     id: Number.parseInt(req.params.id),
-//   });
-//   res.send(result);
-// });
-
-// app.delete("/ads/:id", async (req, res) => {
-//   try {
-//     await Ad.delete({ id: Number.parseInt(req.params.id) });
-//     res.send("Ad has been removed");
-//   } catch (err) {
-//     console.log("err", err);
-//     res.status(500).send(err);
-//   }
-// });
-
 // app.put("/ads/:id", async (req, res) => {
 //   try {
 //     const adIdToUpdate = Number.parseInt(req.params.id);
