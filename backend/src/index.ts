@@ -21,31 +21,6 @@ async function startServer() {
 }
 startServer();
 
-// const app = express();
-
-// app.use(express.json());
-// app.use(cors());
-
-// app.post("/ads", async (req, res) => {
-//   const ad = new Ad();
-//   ad.title = req.body.title;
-//   ad.description = req.body.description;
-//   ad.owner = req.body.owner;
-//   ad.price = req.body.price;
-//   ad.picture = req.body.picture;
-//   ad.location = req.body.location;
-//   ad.category = req.body.category;
-//   // ['1','2'] => [{id:1}, {id:2}]
-//   ad.tags = req.body.tags.map((el: string) => ({ id: Number.parseInt(el) }));
-//   try {
-//     await ad.save();
-//     res.status(201).send("ad has been created");
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).send(err);
-//   }
-// });
-
 // app.get("/ads", async (req, res) => {
 //   // /ads?category=1 => req.query.category = 1
 //   let findOptions: FindManyOptions<Ad> = {
@@ -101,45 +76,5 @@ startServer();
 //   } catch (err) {
 //     console.log("err", err);
 //     res.status(500).send(err);
-//   }
-// });
-
-// app.post("/categories", async (req, res) => {
-//   const newCategory = new Category();
-//   newCategory.title = req.body.title;
-//   try {
-//     await newCategory.save();
-//     res.status(201).send("Category has been created");
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).send(err);
-//   }
-// });
-
-// app.get("/categories", async (_req, res) => {
-//   const categories = await Category.find();
-//   res.send(categories);
-// });
-
-// app.post("/tags", async (req, res) => {
-//   const newTag = new Tag();
-//   newTag.title = req.body.title;
-//   await newTag.save();
-//   res.status(201).send("Tag has been created");
-// });
-
-// app.get("/tags", async (_req, res) => {
-//   const tags = await Tag.find();
-//   res.send(tags);
-// });
-
-// app.listen(port, async () => {
-//   console.log(`Example app listening on port ${port}`);
-//   await dataSource.initialize();
-//   const categories = await Category.find();
-//   if (categories.length === 0) {
-//     const misc = new Category();
-//     misc.title = "misc";
-//     misc.save();
 //   }
 // });

@@ -67,6 +67,12 @@ export default class AdResolver {
     return allAds;
   }
 
+  @Query(() => Ad)
+  async getAd(@Arg("id") id: number) {
+    const ad = await Ad.findOneByOrFail({ id });
+    return ad;
+  }
+
   @Mutation(() => ID)
   async createAd(@Arg("data") data: AdInput) {
     const ad = Ad.create({
@@ -75,5 +81,37 @@ export default class AdResolver {
     });
     await ad.save();
     return ad.id;
+  }
+
+  // Cette version "coûte" deux requêtes, mais renvoie toutes les infos de l'Ad + des entités liées
+  // @Mutation(() => Ad)
+  // async createAd(@Arg("data") data: AdInput) {
+  //   const ad = Ad.create({
+  //     ...data,
+  //     tags: data.tags.map((tag) => ({ id: Number(tag) })),
+  //   });
+  //   await ad.save();
+  //   return await Ad.findOneBy({ id: ad.id });
+  // }
+
+  //TODO Finish this
+  // @Mutation(() => ID)
+  // async updateAd(@Arg("id") id: number, @Arg("data") data: AdInput) {
+  //   //const adToUpdate = await Ad.findOneByOrFail({ id });
+  //   Ad.update(
+  //     { id },
+  //     {
+  //       ...data,
+  //       tags: data.tags && data.tags.map((tag) => ({ id: tag.id })),
+  //     }
+  //   );
+
+  //   return id;
+  // }
+
+  @Mutation(() => ID)
+  async deleteAd(@Arg("id") id: number) {
+    await Ad.delete({ id });
+    return id;
   }
 }
