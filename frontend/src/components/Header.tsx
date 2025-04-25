@@ -1,18 +1,12 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Category } from "../types";
+import { useGetAllCategoriesQuery } from "../generated/graphql-types";
 
 const Header = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const result = await axios.get("http://localhost:3000/categories");
-      setCategories(result.data);
-    };
-    fetchCategories();
-  }, []);
+  const { data, loading, error } = useGetAllCategoriesQuery();
+
+  if (loading) return <p>Wait for it...</p>;
+  if (error) return <p>Woops, on a tout cassé</p>;
   return (
     <header className="header">
       <div className="main-menu">
@@ -61,7 +55,7 @@ const Header = () => {
         </a>
       </div>
       <nav className="categories-navigation">
-        {categories.map((el) => (
+        {data?.getAllCategories.map((el) => (
           <Link
             key={el.id}
             to={`/?category=${el.id}`}
