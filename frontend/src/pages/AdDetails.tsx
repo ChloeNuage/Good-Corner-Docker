@@ -6,9 +6,7 @@ const AdDetailsPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [deleteAd] = useDeleteAdMutation({
-    variables: { deleteAdId: Number(id) },
-  });
+  const [deleteAd] = useDeleteAdMutation();
 
   const { data, loading, error } = useGetAdQuery({
     variables: { getAdId: Number(id) },

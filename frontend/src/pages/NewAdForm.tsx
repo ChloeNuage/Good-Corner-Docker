@@ -1,37 +1,24 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Category, Tag } from "../types";
-
-type Inputs = {
-  title: string;
-  description: string;
-  owner: string;
-  price: number;
-  picture: string;
-  location: string;
-  category: number;
-  tags: string[];
-};
+import {
+  AdInput,
+  useCreateAdMutation,
+  useGetAllCategoriesAndTagsQuery,
+} from "../generated/graphql-types";
 
 const NewAdForm = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
-  useEffect(() => {
-    const fetchCategoriesAndTags = async () => {
-      const categories = await axios.get("http://localhost:3000/categories");
-      setCategories(categories.data);
-      const tags = await axios.get("http://localhost:3000/tags");
-      setTags(tags.data);
-    };
-    fetchCategoriesAndTags();
-  }, []);
+  const { error, loading, data } = useGetAllCategoriesAndTagsQuery();
+  const [createAd] = useCreateAdMutation();
+  const { register, handleSubmit } = useForm<AdInput>();
 
-  const { register, handleSubmit } = useForm<Inputs>();
-
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await axios.post("http://localhost:3000/ads", data);
+  const onSubmit: SubmitHandler<AdInput> = async (data) => {
+    const sanitizedData = { ...data, price: Number(data.price) };
+    await createAd({
+      variables: { data: sanitizedData },
+    });
   };
+
+  if (loading) return <p>Wait for it...</p>;
+  if (error) return <p>Woops, on a tout cassé</p>;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -101,7 +88,7 @@ const NewAdForm = () => {
       <label>
         Categorie
         <select {...register("category", { required: true })}>
-          {categories.map((el) => (
+          {data?.getAllCategories.map((el) => (
             <option value={el.id} key={el.id}>
               {el.title}
             </option>
@@ -110,7 +97,7 @@ const NewAdForm = () => {
       </label>
 
       <br />
-      {tags.map((el) => (
+      {data?.getAllTags.map((el) => (
         <div key={el.id}>
           <label>
             {el.title}

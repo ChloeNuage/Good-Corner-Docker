@@ -47,3 +47,22 @@ export const DELETE_AD = gql`
     deleteAd(id: $deleteAdId)
   }
 `;
+
+export const GET_ALL_CATEGORIES_AND_TAGS = gql`
+  query GetAllCategoriesAndTags {
+    getAllCategories {
+      id
+      title
+    }
+    getAllTags {
+      id
+      title
+    }
+  }
+`;
+
+export const CREATE_AD = gql`
+  mutation CreateAd($data: AdInput!) {
+    createAd(data: $data)
+  }
+`;
