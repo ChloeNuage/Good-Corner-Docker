@@ -13,7 +13,7 @@ async function startServer() {
   const schema = await buildSchema({
     resolvers: [AdResolver, CategoryResolver, TagResolver],
   });
-  const apolloServer = new ApolloServer({ schema: schema });
+  const apolloServer = new ApolloServer({ schema });
   const { url } = await startStandaloneServer(apolloServer, {
     listen: { port },
   });
