@@ -1,0 +1,3 @@
+- demarrer un container pour l'image "backend"
+- demarrer un container pour l'image "frontend"
+- permettre la communication entre les deux containers
