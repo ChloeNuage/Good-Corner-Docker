@@ -6,6 +6,7 @@ import AdCard, { type AdCardProps } from "../components/AdCard";
 const SearchPage = () => {
   const { keyword } = useParams();
   const [ads, setAds] = useState<AdCardProps[]>([]);
+
   useEffect(() => {
     const fetchAds = async () => {
       const result = await axios.get(
@@ -16,6 +17,7 @@ const SearchPage = () => {
     };
     fetchAds();
   }, [keyword]);
+
   return (
     <section className="recent-ads">
       {ads.map((ad) => (

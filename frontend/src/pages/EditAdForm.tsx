@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router";
-import type { AdDetails, Category, Tag } from "../types";
+import {
+  useGetAdQuery,
+  useGetAllCategoriesAndTagsQuery,
+} from "../generated/graphql-types";
 
 type Inputs = {
   title: string;
@@ -17,20 +19,19 @@ type Inputs = {
 
 const EditAdForm = () => {
   const { id } = useParams();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [ad, setAd] = useState<AdDetails>();
-  useEffect(() => {
-    const fetchCategoriesAndTagsAndAd = async () => {
-      const categories = await axios.get("http://backend:3000/categories");
-      setCategories(categories.data);
-      const tags = await axios.get("http://backend:3000/tags");
-      setTags(tags.data);
-      const ad = await axios.get(`http://backend:3000/ads/${id}`);
-      setAd(ad.data);
-    };
-    fetchCategoriesAndTagsAndAd();
-  }, [id]);
+
+  const {
+    data: dataCatsAndTags,
+    loading: loadCatsAndTags,
+    error: errCatsAndTags,
+  } = useGetAllCategoriesAndTagsQuery();
+  const {
+    data: dataAd,
+    loading: loadAd,
+    error: errAd,
+  } = useGetAdQuery({
+    variables: { getAdId: Number(id) },
+  });
 
   const { register, handleSubmit } = useForm<Inputs>();
 
@@ -38,16 +39,17 @@ const EditAdForm = () => {
     await axios.put(`http://backend:3000/ads/${id}`, data);
   };
 
-  if (ad === undefined) {
-    return <p>Loading</p>;
-  }
+  if (errAd || errCatsAndTags) return <p>Woops, we broke something</p>;
+  if (!loadAd || loadCatsAndTags) return <p>Still loading, plz wait...</p>;
+  if (!dataAd || !dataCatsAndTags)
+    return <p>Something's amiss (should never render this)</p>;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label>
         Titre
         <input
-          defaultValue={ad.title}
+          defaultValue={dataAd.getAd.title}
           {...register("title", { required: true })}
         />
       </label>
@@ -57,7 +59,7 @@ const EditAdForm = () => {
       <label>
         Description
         <input
-          defaultValue={ad.description}
+          defaultValue={dataAd.getAd.description}
           {...register("description", { required: true })}
         />
       </label>
@@ -67,7 +69,7 @@ const EditAdForm = () => {
       <label>
         Vendeur
         <input
-          defaultValue={ad.owner}
+          defaultValue={dataAd.getAd.owner}
           {...register("owner", { required: true })}
         />
       </label>
@@ -77,7 +79,7 @@ const EditAdForm = () => {
       <label>
         Ville
         <input
-          defaultValue={ad.location}
+          defaultValue={dataAd.getAd.location}
           {...register("location", { required: true })}
         />
       </label>
@@ -87,7 +89,7 @@ const EditAdForm = () => {
       <label>
         Image
         <input
-          defaultValue={ad.picture}
+          defaultValue={dataAd.getAd.picture}
           {...register("picture", { required: true })}
         />
       </label>
@@ -98,7 +100,7 @@ const EditAdForm = () => {
         Prix
         <input
           type="number"
-          defaultValue={ad.price}
+          defaultValue={dataAd.getAd.price}
           {...register("price", { required: true })}
         />
       </label>
@@ -108,10 +110,10 @@ const EditAdForm = () => {
       <label>
         Categorie
         <select
-          defaultValue={ad.category.id}
+          defaultValue={dataAd.getAd.category.id}
           {...register("category", { required: true })}
         >
-          {categories.map((el) => (
+          {dataCatsAndTags.getAllCategories.map((el) => (
             <option value={el.id} key={el.id}>
               {el.title}
             </option>
@@ -120,12 +122,12 @@ const EditAdForm = () => {
       </label>
 
       <br />
-      {tags.map((el) => (
+      {dataCatsAndTags.getAllTags.map((el) => (
         <div key={el.id}>
           <label>
             {el.title}
             <input
-              defaultChecked={ad.tags.some((tag) => tag.id === el.id)}
+              defaultChecked={dataAd.getAd.tags.some((tag) => tag.id === el.id)}
               value={el.id}
               type="checkbox"
               {...register("tags")}
