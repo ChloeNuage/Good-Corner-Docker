@@ -7,7 +7,6 @@ type Inputs = {
 
 const NewCategoryForm = () => {
   const { register, handleSubmit } = useForm<Inputs>();
-
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await axios.post("http://backend:3000/categories", data);

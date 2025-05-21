@@ -1,7 +1,7 @@
-import axios from "axios";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router";
 import {
+  useCreateAdMutation,
   useGetAdQuery,
   useGetAllCategoriesAndTagsQuery,
 } from "../generated/graphql-types";
@@ -19,7 +19,6 @@ type Inputs = {
 
 const EditAdForm = () => {
   const { id } = useParams();
-
   const {
     data: dataCatsAndTags,
     loading: loadCatsAndTags,
@@ -32,11 +31,16 @@ const EditAdForm = () => {
   } = useGetAdQuery({
     variables: { getAdId: Number(id) },
   });
+  const [createAd] = useCreateAdMutation();
 
   const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await axios.put(`http://backend:3000/ads/${id}`, data);
+    const newData = {
+      ...data,
+      category: `${data.category}`,
+    };
+    createAd({ variables: { data: newData } });
   };
 
   if (errAd || errCatsAndTags) return <p>Woops, we broke something</p>;
