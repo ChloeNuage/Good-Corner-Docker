@@ -1,7 +1,7 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
-import { useState, useEffect } from "react";
-import AdCard, { AdCardProps } from "../components/AdCard";
+import AdCard, { type AdCardProps } from "../components/AdCard";
 
 const SearchPage = () => {
   const { keyword } = useParams();
@@ -9,7 +9,7 @@ const SearchPage = () => {
   useEffect(() => {
     const fetchAds = async () => {
       const result = await axios.get(
-        `http://localhost:3000/ads?search=${keyword}`
+        `http://backend:3000/ads?search=${keyword}`
       );
       console.log("result", result);
       setAds(result.data);

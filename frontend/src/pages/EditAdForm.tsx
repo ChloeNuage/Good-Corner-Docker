@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { AdDetails, Category, Tag } from "../types";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { useParams } from "react-router";
+import type { AdDetails, Category, Tag } from "../types";
 
 type Inputs = {
   title: string;
@@ -22,11 +22,11 @@ const EditAdForm = () => {
   const [ad, setAd] = useState<AdDetails>();
   useEffect(() => {
     const fetchCategoriesAndTagsAndAd = async () => {
-      const categories = await axios.get("http://localhost:3000/categories");
+      const categories = await axios.get("http://backend:3000/categories");
       setCategories(categories.data);
-      const tags = await axios.get("http://localhost:3000/tags");
+      const tags = await axios.get("http://backend:3000/tags");
       setTags(tags.data);
-      const ad = await axios.get(`http://localhost:3000/ads/${id}`);
+      const ad = await axios.get(`http://backend:3000/ads/${id}`);
       setAd(ad.data);
     };
     fetchCategoriesAndTagsAndAd();
@@ -35,7 +35,7 @@ const EditAdForm = () => {
   const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await axios.put(`http://localhost:3000/ads/${id}`, data);
+    await axios.put(`http://backend:3000/ads/${id}`, data);
   };
 
   if (ad === undefined) {

@@ -1,6 +1,6 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import axios from "axios";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 type Inputs = {
   title: string;
 };
@@ -10,7 +10,7 @@ const NewCategoryForm = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await axios.post("http://localhost:3000/categories", data);
+      await axios.post("http://backend:3000/categories", data);
       toast.success("Category has been created");
     } catch (err) {
       console.log(err);
