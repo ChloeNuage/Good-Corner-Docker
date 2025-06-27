@@ -22,92 +22,150 @@ const NewAdForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label>
-        Titre
-        <input
-          defaultValue={"Je vends ma 206"}
-          {...register("title", { required: true })}
-        />
-      </label>
-
-      <br />
-
-      <label>
-        Description
-        <input
-          defaultValue={"Ma 206 est super"}
-          {...register("description", { required: true })}
-        />
-      </label>
-
-      <br />
-
-      <label>
-        Vendeur
-        <input
-          defaultValue={"John Doe"}
-          {...register("owner", { required: true })}
-        />
-      </label>
-
-      <br />
-
-      <label>
-        Ville
-        <input
-          defaultValue={"Paris"}
-          {...register("location", { required: true })}
-        />
-      </label>
-
-      <br />
-
-      <label>
-        Image
-        <input
-          defaultValue={
-            "https://www.actuauto.fr/wp-content/uploads/2021/01/Peugeot-206-scaled.jpg"
-          }
-          {...register("picture", { required: true })}
-        />
-      </label>
-
-      <br />
-
-      <label>
-        Prix
-        <input
-          type="number"
-          defaultValue={4000}
-          {...register("price", { required: true })}
-        />
-      </label>
-
-      <br />
-
-      <label>
-        Categorie
-        <select {...register("category", { required: true })}>
-          {data?.getAllCategories.map((el) => (
-            <option value={el.id} key={el.id}>
-              {el.title}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <br />
-      {data?.getAllTags.map((el) => (
-        <div key={el.id}>
-          <label>
-            {el.title}
-            <input value={el.id} type="checkbox" {...register("tags")} />
-          </label>
+      <div className="form-main">
+        <div className="title-new-add">
+          <h1>Nouvelle annonce</h1>
+          <p>Remplissez le formulaire ci-dessous pour créer une annonce.</p>
         </div>
-      ))}
 
-      <input type="submit" />
+        <div className="content-form-add">
+          <div className="content-form-add-div-flex">
+            {/* Gauche */}
+            <div className="content-form-add-div-flex-left">
+              <div className="form-line">
+                <div className="mini-flex-left">
+                  <p>Titre</p>
+                </div>
+                <div className="mini-flex-right">
+                  <label style={{ width: "90%" }}>
+                    <input  style={{ width: "100%" }}
+                      defaultValue={""}
+                      {...register("title", { required: true })}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-line">
+                <div className="mini-flex-left">
+                  <p>Price</p>
+                </div>
+                <div className="mini-flex-right">
+                  <label className="label-price" style={{ width: "90%" }}>
+                    <input style={{ width: "100%" }}
+                      type="number"
+                      {...register("price", { required: true })}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-line">
+                <div className="mini-flex-left">
+                  <p>Description</p>
+                </div>
+                <div className="mini-flex-right">
+                  <label className="label-description" style={{ width: "90%" }}>
+                    <input  style={{ width: "100%" }}
+                      defaultValue={""}
+                      {...register("description", { required: true })}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-no-line">
+                <div className="mini-flex-left">
+                  <p>Vendeur</p>
+                </div>
+                <div className="mini-flex-right">
+                  <label className="label-owner"  style={{ width: "90%" }}>
+                    <input  style={{ width: "100%" }}
+                      defaultValue={""}
+                      {...register("owner", { required: true })}
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Droite */}
+            <div className="content-form-add-div-flex-right">
+              <div className="form-line">
+                <div className="mini-flex-left">
+                  <p>Ville</p>
+                </div>
+                <div className="mini-flex-right">
+                  <label className="label-location"  style={{ width: "90%" }}>
+                    <input  style={{ width: "100%" }}
+                      defaultValue={""}
+                      {...register("location", { required: true })}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-line">
+                <div className="mini-flex-left">
+                  <p>Image</p>
+                </div>
+                <div className="mini-flex-right">
+                  <label className="label-picture"  style={{ width: "90%" }}>
+                    <input  style={{ width: "100%" }}
+                      defaultValue={ "" }
+                      {...register("picture", { required: true })}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-line">
+                <div className="mini-flex-left">
+                  <p>Catégorie</p>
+                </div>
+                <div className="mini-flex-right">
+                  <label className="label-category">
+                    <select {...register("category", { required: true })}>
+                      {data?.getAllCategories.map((el) => (
+                        <option value={el.id} key={el.id}>
+                          {el.title}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+              <div className="form-no-line">
+                <div className="mini-flex-left">
+                  <p>Tags</p>
+                </div>
+                <div className="mini-flex-right">
+                  {data?.getAllTags.map((el) => (
+                    <div key={el.id}>
+                      <label className="label-tag">
+                        {el.title}
+                        <input 
+                          className="input-tag"
+                          value={el.id}
+                          type="checkbox"
+                          {...register("tags")}
+                        />
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="button-submit-form">
+            <input type="submit" value="Créer mon annonce" />
+          </div>
+        </div>
+      </div>
     </form>
   );
 };
+
 export default NewAdForm;

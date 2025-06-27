@@ -11,9 +11,8 @@ const Header = () => {
     <header className="header">
       <div className="main-menu">
         <h1>
-          <a href="/" className="button logo link-button">
-            <span className="mobile-short-label">TGC</span>
-            <span className="desktop-long-label">THE GOOD CORNER</span>
+          <a href="/" className="logo link-button">
+          <p style={{ fontFamily: "'Pinyon Script', cursive", fontStyle: "italic", fontSize: 25, fontWeight: 400, color: "black" }}>the</p ><p style={{ fontFamily: "'Instrument Sans', sans-serif", fontSize: 25, fontWeight: 900, color: "black", fontStretch: "extra-expanded" }}> GOODCORNER</p>
           </a>
         </h1>
         <form
@@ -33,7 +32,7 @@ const Header = () => {
             className="text-field main-search-field"
             type="search"
           />
-          <button className="button button-primary">
+          <button className="button-search">
             <svg
               aria-hidden="true"
               width="16"
@@ -41,7 +40,7 @@ const Header = () => {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="-50 -50 530 550"
               transform="scale(-1, 1)"
-              fill="currentColor"
+              fill="#fbf9f1"
               xmlSpace="preserve"
               className="styled__BaseIcon-sc-1jsm4qr-0 llmHhT"
             >
@@ -49,9 +48,8 @@ const Header = () => {
             </svg>
           </button>
         </form>
-        <a href="/ads/new" className="button link-button">
-          <span className="mobile-short-label">Publier</span>
-          <span className="desktop-long-label">Publier une annonce</span>
+        <a href="/ads/new" className="button-publish-ad ">
+          <span className="desktop-long-label">NOUVELLE ANNONCE</span>
         </a>
       </div>
       <nav className="categories-navigation">

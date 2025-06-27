@@ -8,7 +8,7 @@ export type AdCardProps = {
 const AdCard = ({ title, picture, price }: AdCardProps) => {
   return (
     <div className="ad-card-container">
-      <img className="ad-card-image" src={picture} alt={title} />
+      <div className="ad-card-image-div"><img className="ad-card-image" src={picture} alt={title} /></div>
       <div className="ad-card-text">
         <div className="ad-card-title">{title}</div>
         <div className="ad-card-price">{price} €</div>

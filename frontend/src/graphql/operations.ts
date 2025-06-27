@@ -1,12 +1,16 @@
 import { gql } from "@apollo/client";
 
 export const GET_ALL_ADS = gql`
-  query GetAllAds {
-    getAllAds {
+  query GetAllAds($search: String) {
+    getAllAds(search: $search) {
       id
       title
-      price
       picture
+      price
+      category {
+        id
+        title
+      }
     }
   }
 `;

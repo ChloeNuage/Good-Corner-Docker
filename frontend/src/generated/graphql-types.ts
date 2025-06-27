@@ -102,6 +102,11 @@ export type QueryGetAdArgs = {
   id: Scalars['Float']['input'];
 };
 
+
+export type QueryGetAllAdsArgs = {
+  search?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Tag = {
   __typename?: 'Tag';
   ads: Array<Ad>;
@@ -113,10 +118,12 @@ export type TagInput = {
   title: Scalars['String']['input'];
 };
 
-export type GetAllAdsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllAdsQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type GetAllAdsQuery = { __typename?: 'Query', getAllAds: Array<{ __typename?: 'Ad', id: number, title: string, price: number, picture: string }> };
+export type GetAllAdsQuery = { __typename?: 'Query', getAllAds: Array<{ __typename?: 'Ad', id: number, title: string, picture: string, price: number, category: { __typename?: 'Category', id: number, title: string } }> };
 
 export type GetAllCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -158,12 +165,16 @@ export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: 
 
 
 export const GetAllAdsDocument = gql`
-    query GetAllAds {
-  getAllAds {
+    query GetAllAds($search: String) {
+  getAllAds(search: $search) {
     id
     title
-    price
     picture
+    price
+    category {
+      id
+      title
+    }
   }
 }
     `;
@@ -180,6 +191,7 @@ export const GetAllAdsDocument = gql`
  * @example
  * const { data, loading, error } = useGetAllAdsQuery({
  *   variables: {
+ *      search: // value for 'search'
  *   },
  * });
  */

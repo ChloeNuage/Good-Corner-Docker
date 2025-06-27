@@ -1,31 +1,49 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
-import AdCard, { type AdCardProps } from "../components/AdCard";
+import { useParams, Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_ADS } from "../graphql/operations";
+import AdCard from "../components/AdCard";
+import type { GetAllAdsQuery } from "../generated/graphql-types";
 
 const SearchPage = () => {
   const { keyword } = useParams();
-  const [ads, setAds] = useState<AdCardProps[]>([]);
 
-  useEffect(() => {
-    const fetchAds = async () => {
-      const result = await axios.get(
-        `http://backend:3000/ads?search=${keyword}`
-      );
-      console.log("result", result);
-      setAds(result.data);
-    };
-    fetchAds();
-  }, [keyword]);
+  const { data, loading, error } = useQuery<GetAllAdsQuery>(GET_ALL_ADS, {
+    variables: { search: keyword },
+  });
+
+  if (loading) return <p>Chargement...</p>;
+  if (error) return <p>Erreur : {error.message}</p>;
+
+  const ads = data?.getAllAds ?? [];
 
   return (
-    <section className="recent-ads">
-      {ads.map((ad) => (
+  <section style={{
+      display: "flex",
+      flexWrap: "wrap",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+    }}>
+    <div className="search-results-title">
+      Résultats de recherche pour « {keyword} »
+    </div>
+   <div  className="recent-ads" >
+    {ads.length === 0 ? (
+      <p>Aucune annonce trouvée pour « {keyword} ».</p>
+    ) : (
+      ads.map((ad) => (
         <Link key={ad.id} to={`/ads/${ad.id}`}>
-          <AdCard picture={ad.picture} price={ad.price} title={ad.title} />
+          <AdCard
+            picture={ad.picture}
+            price={ad.price}
+            title={ad.title}
+          />
         </Link>
-      ))}
-    </section>
-  );
+      ))
+    )}
+   </div>
+    
+  </section>
+);
 };
+
 export default SearchPage;
