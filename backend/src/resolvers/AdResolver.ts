@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   Field,
   ID,
   InputType,
@@ -8,10 +9,9 @@ import {
   Resolver,
 } from "type-graphql";
 import Ad from "../entities/Ad";
-import { FindManyOptions, In, ILike} from "typeorm";
+import { FindManyOptions, In } from "typeorm";
 import Category from "../entities/Category";
 import Tag from "../entities/Tag";
-
 
 @InputType()
 class AdInput {
@@ -43,20 +43,30 @@ class AdInput {
 @Resolver(Ad)
 export default class AdResolver {
   @Query(() => [Ad])
-  async getAllAds(@Arg("search", { nullable: true }) search?: string) {
-  let findOptions: FindManyOptions<Ad> = {
-    relations: { category: true, tags: true },
-  };
-
-  if (search) {
-    findOptions.where = {
-      title: ILike(`%${search}%`), // Import ILike de TypeORM
+  async getAllAds() {
+    // /ads?category=1 => req.query.category = 1
+    let findOptions: FindManyOptions<Ad> = {
+      relations: { category: true, tags: true },
     };
-  }
+    // if (req.query.category !== undefined) {
+    //   findOptions = {
+    //     ...findOptions,
+    //     where: {
+    //       category: { id: Number.parseInt(req.query.category as string) },
+    //     },
+    //   };
+    // }
+    // if (req.query.search !== undefined) {
+    //   console.log("search query", req.query.search);
+    //   findOptions = {
+    //     ...findOptions,
+    //     where: { title: ILike(`%${req.query.search}%`) },
+    //   };
+    // }
+    const allAds = await Ad.find(findOptions);
 
-  const allAds = await Ad.find(findOptions);
-  return allAds;
-}
+    return allAds;
+  }
 
   @Query(() => Ad)
   async getAd(@Arg("id") id: number) {
@@ -95,6 +105,7 @@ export default class AdResolver {
     return ad.id;
   }
 
+  @Authorized("ADMIN")
   @Mutation(() => ID)
   async deleteAd(@Arg("id") id: number) {
     await Ad.delete({ id });

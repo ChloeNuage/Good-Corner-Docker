@@ -4,21 +4,44 @@ import {
   useCreateAdMutation,
   useGetAllCategoriesAndTagsQuery,
 } from "../generated/graphql-types";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import { GET_ALL_ADS } from "../graphql/operations";
+
 
 const NewAdForm = () => {
-  const { error, loading, data } = useGetAllCategoriesAndTagsQuery();
-  const [createAd] = useCreateAdMutation();
-  const { register, handleSubmit } = useForm<AdInput>();
+   const navigate = useNavigate();
+
+   const { error, loading, data } = useGetAllCategoriesAndTagsQuery();
+
+   const [createAd] = useCreateAdMutation({
+    refetchQueries: [
+      {
+        query: GET_ALL_ADS,
+      },
+    ],
+  });
+    const { register, handleSubmit } = useForm<AdInput>();
 
   const onSubmit: SubmitHandler<AdInput> = async (data) => {
-    const sanitizedData = { ...data, price: Number(data.price) };
-    await createAd({
-      variables: { data: sanitizedData },
-    });
+    try {
+      const sanitizedData = { ...data, price: Number(data.price) };
+
+      const { data: newAdData } = await createAd({
+        variables: { data: sanitizedData },
+      });
+      // bellow the version without the destructuration / alias
+      // const result = await createAd({ variables: { data: newData } });
+      // const newAdData = result.data;
+      navigate(`/ads/${newAdData?.createAd}`, { replace: true });
+    } catch {
+      toast.error("Une error !");
+    }
   };
 
   if (loading) return <p>Wait for it...</p>;
   if (error) return <p>Woops, on a tout cassé</p>;
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

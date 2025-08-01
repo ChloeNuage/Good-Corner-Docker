@@ -1,20 +1,30 @@
-import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_ADS } from "../graphql/operations";
-import AdCard from "../components/AdCard";
-import type { GetAllAdsQuery } from "../generated/graphql-types";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router";
+import AdCard, { type AdCardProps } from "../components/AdCard";
+
 
 const SearchPage = () => {
   const { keyword } = useParams();
+  const [ads, setAds] = useState<AdCardProps[]>([]);
 
-  const { data, loading, error } = useQuery<GetAllAdsQuery>(GET_ALL_ADS, {
-    variables: { search: keyword },
-  });
+    useEffect(() => {
+    const fetchAds = async () => {
+      const result = await axios.get(
+        `http://localhost:12345/ads?search=${keyword}`,
+        {
+          headers: {
+            "Content-Type": "application/json", // important pour ne pas bloquer le CSRF
+            "x-apollo-operation-name": "searchAds",
+          },
+        }
+      );
+      console.log("result", result);
+      setAds(result.data);
+    };
+    fetchAds();
+  }, [keyword]);
 
-  if (loading) return <p>Chargement...</p>;
-  if (error) return <p>Erreur : {error.message}</p>;
-
-  const ads = data?.getAllAds ?? [];
 
   return (
   <section style={{

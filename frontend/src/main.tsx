@@ -7,7 +7,7 @@ import App from "./App.tsx";
 import "./index.css";
 
 const client = new ApolloClient({
-  uri: "http://localhost:12345",
+  uri: "/api",  // URI relative, donc même domaine et port que la page
   cache: new InMemoryCache(),
 });
 

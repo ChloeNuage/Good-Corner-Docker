@@ -1,19 +1,12 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router";
 import { useGetAllAdsQuery } from "../generated/graphql-types";
 import AdCard from "./AdCard";
 
 const RecentAds = () => {
   const { data, loading, error } = useGetAllAdsQuery();
-  const [searchParams] = useSearchParams();
-  const selectedCategory = searchParams.get("category");
-
   if (loading) return <p>Wait for it...</p>;
   if (error) return <p>Woops, on a tout cassé</p>;
-  if (!data) return <p>Woops, on a tout cassé (should never render this)</p>;
-
-  const filteredAds = selectedCategory
-    ? data.getAllAds.filter((ad) => ad.category.id === Number(selectedCategory))
-    : data.getAllAds;
+  if (!data) return <p>Woops, on a tout cassé </p>;
 
   return (
     <>
@@ -27,22 +20,17 @@ const RecentAds = () => {
           <img src="./images/horloge-banane.jpg" alt="banane" />
         </div>
       </div>
+      
 
       <div className="title-recent-ads">
-        {selectedCategory ? `Annonces filtrées par catégorie` : `Découvrez nos dernières annonces les plus consultées`}
+       Découvrez nos dernières annonces les plus consultées
       </div>
-
-      <section className="recent-ads">
-        {filteredAds.map((el, i) => (
-          <div
-            key={el.id}
-            className={`ad-card-container ${i % 5 === 0 ? "first-column" : ""}`}
-          >
-            <Link to={`/ads/${el.id}`}>
+        <section className="recent-ads">
+          {data?.getAllAds.map((el) => (
+            <Link key={el.id} to={`/ads/${el.id}`}>
               <AdCard picture={el.picture} title={el.title} price={el.price} />
             </Link>
-          </div>
-        ))}
+          ))}
       </section>
 
       <div className="advertising-2">
@@ -60,3 +48,4 @@ const RecentAds = () => {
 };
 
 export default RecentAds;
+

@@ -1,0 +1,3 @@
+- Faire fonctionner la recherche
+- Faire fonctionner les filtre de catégorie
+- faire la page de l'authentification en front (l'ajouter aussi pas sur de l'avoir fait)

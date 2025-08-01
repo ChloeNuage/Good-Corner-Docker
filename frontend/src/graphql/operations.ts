@@ -1,16 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const GET_ALL_ADS = gql`
-  query GetAllAds($search: String) {
-    getAllAds(search: $search) {
+  query GetAllAds {
+    getAllAds {
       id
       title
-      picture
       price
-      category {
-        id
-        title
-      }
+      picture
     }
   }
 `;
@@ -74,5 +70,11 @@ export const CREATE_AD = gql`
 export const CREATE_CATEGORY = gql`
   mutation CreateCategory($data: CategoryInput!) {
     createCategory(data: $data)
+  }
+`;
+
+export const SIGNUP = gql`
+  mutation Signup($data: NewUserInput!) {
+    signup(data: $data)
   }
 `;
